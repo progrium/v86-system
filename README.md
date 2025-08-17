@@ -1,19 +1,14 @@
 # v86-system
 
 ```
-v86-system v0.1.0
-Command-line v86 runner with QEMU-compatible flags
+v86-system v0.3.0
+Command-line v86 (i386) runner with QEMU-compatible flags
 
 Usage:
   v86-system-i386 [options]
 
-Standard options:
-  -h, --help            Show help
-  -v, --version         Show version
-
 Memory options:
   -m SIZE               Set memory size (default: 512M)
-  -vga-mem SIZE         Set VGA memory size (default: 8M)
 
 Storage options:
   -hda FILE             Primary hard disk image
@@ -29,48 +24,29 @@ Boot options:
   -append STRING        Kernel command line
 
 System options:
-  -bios FILE            BIOS image file
-  -vga-bios FILE        VGA BIOS image file
+  -bios FILE            BIOS image file (default: seabios)
   -acpi                 Enable ACPI (default: off)
   -fastboot             Enable fast boot
 
-V86 specific options:
-  -disable-keyboard     Disable keyboard input
-  -disable-mouse        Disable mouse input
-  -disable-speaker      Disable speaker output
-  -log-level LEVEL      Set logging level (0-3)
+Network options:
+  -netdev CONFIG        Network device configuration
+
+Standard options:
+  -h, --help            Show help
+  -v, --version         Show version
 
 Examples:
   v86-system-i386 -hda disk.img
   v86-system-i386 -m 1G -hda disk.img -cdrom boot.iso
   v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"
+  v86-system-i386 -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
+
 ```
 
 ## Install
 
-
-
-## Examples
-
-### Basic VM with memory and disk
 ```bash
-# QEMU style
-v86-system-i386 -m 1G -hda disk.img
-```
-
-### Boot from CD-ROM
-```bash
-v86-system-i386 -m 512M -hda disk.img -cdrom install.iso -boot d
-```
-
-### Linux kernel boot
-```bash
-v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0 root=/dev/sda1"
-```
-
-### System options
-```bash
-v86-system-i386 -hda disk.img -acpi -fastboot
+npm i -g v86-system
 ```
 
 ## QEMU Flag Mappings
@@ -88,18 +64,30 @@ v86-system-i386 -hda disk.img -acpi -fastboot
 | `-append STRING` | `cmdline` | Kernel command line |
 | `-bios FILE` | `bios` | BIOS image |
 | `-acpi` | `acpi` | Enable ACPI |
+| `-netdev user,CONFIG` | `net_device` | Enable user-mode networking |
 
-## V86-Specific Options
 
-Additional options specific to the V86 emulator:
+## Examples
 
-- `--vga-mem SIZE`: Set VGA memory size
-- `--disable-keyboard`: Disable keyboard input
-- `--disable-mouse`: Disable mouse input  
-- `--disable-speaker`: Disable speaker output
-- `--autostart`: Start emulation automatically (default: on)
-- `--fastboot`: Enable fast boot
-- `--log-level LEVEL`: Set logging level (0-3)
+### Basic VM with memory and disk
+```bash
+v86-system-i386 -m 1G -hda disk.img
+```
+
+### Boot from CD-ROM
+```bash
+v86-system-i386 -m 512M -hda disk.img -cdrom install.iso -boot d
+```
+
+### Linux kernel boot
+```bash
+v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0 root=/dev/sda1"
+```
+
+### Network options
+```bash
+v86-system-i386 -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
+```
 
 ## License
 
