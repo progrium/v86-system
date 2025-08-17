@@ -53,7 +53,6 @@ function showHelp() {
 //   console.log('  --netdev CONFIG        Network device configuration');
   console.log('');
   console.log('V86 specific options:');
-  console.log('  -autostart            Start emulation automatically (default: on)');
   console.log('  -disable-keyboard     Disable keyboard input');
   console.log('  -disable-mouse        Disable mouse input');
   console.log('  -disable-speaker      Disable speaker output');
@@ -200,10 +199,6 @@ const { values } = parseArgs({
       type: 'string',
     },
     // V86 specific options
-    autostart: {
-      type: 'boolean',
-      default: true,
-    },
     'disable-keyboard': {
       type: 'boolean',
       default: false,
@@ -237,7 +232,7 @@ if (values.help) {
     // Build V86 configuration from command line arguments
     const config = {
         wasm_path: path.join(assetsDir, "v86.wasm"),
-        autostart: values.autostart,
+        autostart: true,
     };
     
     // Memory configuration

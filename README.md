@@ -35,7 +35,6 @@ System options:
   -fastboot             Enable fast boot
 
 V86 specific options:
-  -autostart            Start emulation automatically (default: on)
   -disable-keyboard     Disable keyboard input
   -disable-mouse        Disable mouse input
   -disable-speaker      Disable speaker output
