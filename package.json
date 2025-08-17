@@ -1,0 +1,22 @@
+{
+  "name": "v86-system",
+  "version": "0.1.0",
+  "description": "Command-line v86 runner with QEMU-compatible flags",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "v86-system-i386": "./cli.js"
+  },
+  "files": ["assets/", "cli.js"],
+  "scripts": {
+    "start": "node cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["cli", "nodejs", "tool"],
+  "author": "",
+  "license": "MIT",
+
+  "engines": {
+    "node": ">=18.3.0"
+  }
+}
