@@ -42,9 +42,9 @@ V86 specific options:
   -log-level LEVEL      Set logging level (0-3)
 
 Examples:
-  v86-system -hda disk.img
-  v86-system -m 1G -hda disk.img -cdrom boot.iso
-  v86-system -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"
+  v86-system-i386 -hda disk.img
+  v86-system-i386 -m 1G -hda disk.img -cdrom boot.iso
+  v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"
 ```
 
 ## Install

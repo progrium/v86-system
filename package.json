@@ -1,6 +1,6 @@
 {
   "name": "v86-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Command-line v86 runner with QEMU-compatible flags",
   "main": "index.js",
   "type": "module",
@@ -12,7 +12,7 @@
     "start": "node cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["cli", "nodejs", "tool"],
+  "keywords": ["cli", "nodejs", "tool", "v86", "qemu", "emulator"],
   "author": "",
   "license": "MIT",
 
