@@ -12,7 +12,7 @@ function showHelp() {
     console.log(pkg.description);
     console.log('');
     console.log('Usage:');
-    console.log('  v86-system-i386 [options]');
+    console.log('  v86-system [options]');
 
     console.log('');
     console.log('Memory options:');
@@ -43,6 +43,11 @@ function showHelp() {
     console.log('Network options:');
     console.log('  -netdev CONFIG        Network device configuration');
   
+
+    console.log('');
+    console.log('VirtFS options:');
+    console.log('  -virtfs CONFIG        VirtFS configuration');
+
     console.log('');
     console.log('Standard options:');
     console.log('  -h, --help            Show help');
@@ -50,10 +55,10 @@ function showHelp() {
   
     console.log('');
     console.log('Examples:');
-    console.log('  v86-system-i386 -hda disk.img');
-    console.log('  v86-system-i386 -m 1G -hda disk.img -cdrom boot.iso');
-    console.log('  v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"');
-    console.log('  v86-system-i386 -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777');
+    console.log('  v86-system -hda disk.img');
+    console.log('  v86-system -m 1G -hda disk.img -cdrom boot.iso');
+    console.log('  v86-system -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"');
+    console.log('  v86-system -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777');
     console.log('');
 }
 
@@ -183,7 +188,12 @@ const { values } = parseArgs({
         // Network options
         netdev: {
             type: 'string',
-        }
+        },
+
+        // VirtFS options
+        virtfs: {
+            type: 'string',
+        },
     },
 });
 
@@ -247,7 +257,7 @@ if (values.help) {
     // System configuration
     const biosPath = values.bios || path.join(assetsDir, "seabios.bin");
     config.bios = { url: biosPath };
-    
+
     if (values.acpi) {
         config.acpi = true;
     }
@@ -262,6 +272,16 @@ if (values.help) {
         const mode = parts.shift();
         if (mode === "user") {
             config.net_device = Object.fromEntries(parts.map(item => item.split('=')));
+        }
+    }
+
+    // VirtFS configuration
+    if (values.virtfs) {
+        config.filesystem = {};
+        const parts = values.virtfs.split(",");
+        const mode = parts.shift();
+        if (mode === "proxy") {
+            config.filesystem.proxy_url = parts.shift();
         }
     }
     

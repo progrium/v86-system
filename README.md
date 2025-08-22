@@ -1,11 +1,11 @@
 # v86-system
 
 ```
-v86-system v0.3.0
-Command-line v86 (i386) runner with QEMU-compatible flags
+v86-system v0.4.0
+Command-line v86 runner with QEMU-compatible flags
 
 Usage:
-  v86-system-i386 [options]
+  v86-system [options]
 
 Memory options:
   -m SIZE               Set memory size (default: 512M)
@@ -31,15 +31,18 @@ System options:
 Network options:
   -netdev CONFIG        Network device configuration
 
+VirtFS options:
+  -virtfs CONFIG        VirtFS configuration
+
 Standard options:
   -h, --help            Show help
   -v, --version         Show version
 
 Examples:
-  v86-system-i386 -hda disk.img
-  v86-system-i386 -m 1G -hda disk.img -cdrom boot.iso
-  v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"
-  v86-system-i386 -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
+  v86-system -hda disk.img
+  v86-system -m 1G -hda disk.img -cdrom boot.iso
+  v86-system -kernel vmlinuz -initrd initrd.img -append "console=ttyS0"
+  v86-system -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
 
 ```
 
@@ -65,29 +68,37 @@ npm i -g v86-system
 | `-bios FILE` | `bios` | BIOS image |
 | `-acpi` | `acpi` | Enable ACPI |
 | `-netdev user,CONFIG` | `net_device` | Enable user-mode networking |
+| `-virtfs proxy,URL` | `filesystem.proxy_url` | VirtFS 9P WebSocket proxy |
 
 
 ## Examples
 
 ### Basic VM with memory and disk
 ```bash
-v86-system-i386 -m 1G -hda disk.img
+v86-system -m 1G -hda disk.img
 ```
 
 ### Boot from CD-ROM
 ```bash
-v86-system-i386 -m 512M -hda disk.img -cdrom install.iso -boot d
+v86-system -m 512M -hda disk.img -cdrom install.iso -boot d
 ```
 
 ### Linux kernel boot
 ```bash
-v86-system-i386 -kernel vmlinuz -initrd initrd.img -append "console=ttyS0 root=/dev/sda1"
+v86-system -kernel vmlinuz -initrd initrd.img -append "console=ttyS0 root=/dev/sda1"
 ```
 
 ### Network options
 ```bash
-v86-system-i386 -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
+v86-system -hda disk.img -netdev user,type=virtio,relay_url=ws://localhost:8777
 ```
+
+### Boot from 9P (over WebSocket)
+```bash
+v86-system -kernel vmlinuz -virtfs proxy,ws://localhost:7654 -append "console=ttyS0 rw root=host9p rootfstype=9p rootflags=trans=virtio,version=9p2000.L,aname=rootfs"
+```
+
+This assumes a 9P2000 WebSocket server is running with a root filesystem under `rootfs`. 
 
 ## License
 

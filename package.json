@@ -1,11 +1,11 @@
 {
   "name": "v86-system",
-  "version": "0.3.0",
-  "description": "Command-line v86 (i386) runner with QEMU-compatible flags",
+  "version": "0.4.0",
+  "description": "Command-line v86 runner with QEMU-compatible flags",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "v86-system-i386": "./cli.js"
+    "v86-system": "./cli.js"
   },
   "files": ["assets/", "cli.js"],
   "scripts": {
