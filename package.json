@@ -1,6 +1,6 @@
 {
   "name": "v86-system",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Command-line v86 runner with QEMU-compatible flags",
   "main": "index.js",
   "type": "module",

@@ -288,14 +288,43 @@ if (values.help) {
     // Create and start the emulator
     const emulator = new V86(config);
     emulator.add_listener("serial0-output-byte", (b) => process.stdout.write(String.fromCharCode(b)));
-    process.stdin.setRawMode(true);
+    
+    // Handle graceful shutdown
+    function cleanup() {
+        if (process.stdin.isTTY) {
+            process.stdin.setRawMode(false);
+        }
+        emulator.destroy();
+        process.exit(0);
+    }
+    
+    // Handle SIGTERM signal (but not SIGINT - we want to pass Ctrl+C to guest)
+    process.on('SIGTERM', cleanup);
+    
+    // Escape sequence state
+    let escapeMode = false;
+    
+    // Setup stdin handling if available
+    if (process.stdin.isTTY) {
+        process.stdin.setRawMode(true);
+        console.log("* v86 emulator started. Press Ctrl+A then X to exit.");
+    }
     process.stdin.resume();
     process.stdin.setEncoding("utf8");
     process.stdin.on("data", (c) => {
-        if(c === "\u0003") { // ctrl c
-            emulator.destroy();
-            process.stdin.pause();
+        if (escapeMode) {
+            escapeMode = false;
+            if (c.toLowerCase() === 'x') {
+                cleanup();
+                return;
+            }
+            // If not 'x', send the escape sequence to guest
+            emulator.serial0_send("\u0001"); // Send Ctrl+A
+            emulator.serial0_send(c);        // Send the following character
+        } else if (c === "\u0001") { // Ctrl+A
+            escapeMode = true;
         } else {
+            // Send all other characters (including Ctrl+C) to the guest
             emulator.serial0_send(c);
         }
     });
